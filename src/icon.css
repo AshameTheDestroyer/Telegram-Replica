@@ -1,0 +1,24 @@
+button.icon {
+    --bg-colour: hsl(var(--sub-fore-colour));
+
+    display: flex;
+    place-content: center;
+    place-items: center;
+    width: var(--icon-size);
+    height: var(--icon-size);
+    background-color: var(--bg-colour);
+    border: 0;
+    border-radius: 100vh;
+    font-size: calc(var(--font-size) + 0.2rem);
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    text-transform: capitalize;
+    align-self: center;
+    margin: 5px;
+    padding: 0;
+}
+.icon img {
+    width: calc(100% + 2px);
+    border-radius: 100vh;
+}

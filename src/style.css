@@ -1,0 +1,32 @@
+* {
+    font-family: 'Segoe UI Semibold';
+}
+body {
+    font-size: var(--font-size);
+    max-height: 100vh;
+    margin: 0px;
+    background-color: hsl(var(--main-colour));
+    color: hsl(var(--sub-fore-colour));
+}
+:root {
+    --main-colour: 215, 40%, 9%;
+    --secondary-colour: 210, 30%, 13%;
+    --fore-colour: 214, 26%, 19%;
+    --sub-fore-colour: 211, 17%, 52%;
+    --light-colour: 180, 41%, 58%;
+    --selection-colour: 210, 47%, 32%;
+
+    --font-size: 0.8rem;
+}
+#page {
+    display: flex;
+}
+body::-webkit-scrollbar,
+body::-webkit-scrollbar-track {
+    background-color: hsl(var(--main-colour));
+    border-radius: 100vh;
+}
+body::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--fore-colour));
+    border-radius: 100vh;
+}

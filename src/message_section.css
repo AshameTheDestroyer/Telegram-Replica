@@ -1,0 +1,119 @@
+.message_section {
+    --padding: 10px;
+
+    position: relative;
+    background-color: hsl(var(--secondary-colour));
+    height: calc(100vh - var(--padding) * 2);
+    min-width: 260px;
+    width: 28%;
+    padding: var(--padding);
+}
+
+.message_section .header {
+    display: flex;
+    place-items: center;
+}
+
+.side_menu_button {
+    background-image: url('./Icons/menu.png');
+    background-position: 50%;
+    background-size: 70%;
+    background-repeat: no-repeat;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    filter:
+        opacity(0.25)
+        drop-shadow(0 0 0 hsl(var(--fore-colour)))
+        saturate(10);
+    margin-right: 5px;
+    border-radius: 100vh;
+    padding: 15px;
+    transition: 0.25s;
+}
+.side_menu_button:hover {
+    filter:
+        opacity(0.5)
+        drop-shadow(0 0 0 hsl(var(--sub-fore-colour)))
+        saturate(5);
+}
+.side_menu_button:focus {
+    background-color: hsl(var(--main-colour));
+}
+
+.search_input_container {
+    position: relative;
+    width: 100%;
+}
+.search_input {
+    background-color: hsl(var(--fore-colour));
+    border: 0;
+    color: white;
+    padding: 7px;
+    font-size: var(--font-size);
+    border-radius: 1vh;
+    width: calc(100% - 14px);
+}
+.search_input_placeholder {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 10px;
+    transition: 0.2s;
+}
+.clear_input_button {
+    position: absolute;
+    background-image: url('./Icons/delete.png');
+    background-repeat: no-repeat;
+    background-position-x: 50%;
+    background-position-y: 50%;
+    background-size: 80%;
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    border: 0;
+    filter:
+        opacity(0.25)
+        drop-shadow(0 0 0 hsl(var(--fore-colour)))
+        saturate(10);
+    top: calc(50% - 10px);
+    right: 5px;
+    transition: 0.5s;
+    cursor: pointer;
+}
+.clear_input_button:hover {
+    filter:
+        opacity(0.5)
+        drop-shadow(0 0 0 hsl(var(--sub-fore-colour)))
+        saturate(5);
+}
+
+.message_renderer {
+    height: calc(100% - var(--padding) * 4);
+    overflow-y: hidden;
+    overflow-x: hidden;
+    padding-right: 10px;
+    margin-top: 10px;
+    transition: 0.1s;
+}
+.message_renderer:is(:hover, :focus-within) {
+    overflow-y: auto;
+}
+.message_renderer::-webkit-scrollbar,
+.message_renderer::-webkit-scrollbar-track {
+    background-color: hsl(var(--main-colour));
+    border-radius: 100vh;
+}
+.message_renderer::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--fore-colour));
+    border-radius: 100vh;
+}
+
+.loading_message {
+    display: flex;
+    place-content: center;
+    place-items: center;
+    height: 100%;
+}

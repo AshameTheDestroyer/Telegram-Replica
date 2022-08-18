@@ -1,0 +1,35 @@
+.chat_section {
+    background-color: hsl(var(--main-colour));
+    display: flex;
+    width: 71%;
+    height: 100vh;
+}
+
+.empty {
+    display: flex;
+    place-content: center;
+    width: 100%;
+}
+.select_chat_message {
+    background-color: hsl(var(--secondary-colour));
+    color: white;
+    padding-top: 7.5px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 100vh;
+    cursor: default;
+    align-self: center;
+}
+
+.chat {
+    width: 100%;
+}
+
+.chat .header {
+    background-color: hsl(var(--secondary-colour));
+    height: 3rem;
+    padding: 20px;
+    font-size: calc(var(--font-size) + 0.5rem);
+    color: white;
+}

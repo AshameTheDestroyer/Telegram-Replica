@@ -1,0 +1,115 @@
+.message {
+    --icon-size: 40px;
+
+    position: relative;
+    display: flex;
+    background-color: hsl(var(--fore-colour));
+    margin-top: 5px;
+    margin-bottom: 10px;
+    margin-left: 2.5px;
+    padding: 5px;
+    border-radius: 2vh;
+    width: calc(100% - 10px);
+    height: 55px;
+    transition: 0.25s;
+    animation-name: message-selection;
+    animation-duration: 0.5s;
+    overflow: hidden;
+}
+
+.displayer {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    width: calc(100% - var(--icon-size));
+    padding: 5px;
+    height: fit-content;
+}
+
+.sender {
+    color: white;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    height: calc(var(--font-size) + 0.45rem);
+    text-decoration: none;
+    margin-right: 5px;
+    text-transform: capitalize;
+    cursor: pointer;
+    width: fit-content;
+}
+
+.time_container {
+    display: flex;
+    place-content: end;
+    height: fit-content;
+}
+.time {
+    text-decoration: none;
+    cursor: pointer;
+}
+.time_container img {
+    margin-right: 2.5px;
+    transform: translateY(1.5px);
+    width: 12px;
+    height: 12px;
+}
+.time_container img[alt='ch'],
+.time_container img[alt='dc'] {
+    filter: opacity(0.5)
+        drop-shadow(0 0 0 hsl(var(--fore-colour)))
+        saturate(100);
+}
+.time_container img[alt='cl'] {
+    filter: opacity(0.25)
+        drop-shadow(0 0 0 hsl(var(--fore-colour)))
+        saturate(10);
+}
+
+.content_displayer {
+    overflow: hidden;
+    cursor: pointer;
+    transform: translateY(-3px);
+    width: 100%;
+    height: 100%;
+}
+.content {
+    text-decoration: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.draft_indicator {
+    color:#ee0808;
+}
+
+.indicators {
+    display: flex;
+    place-self: end;
+    height: 100%;
+}
+.messages_indicator,
+.heart_indicator {
+    width: 20px;
+    height: 20px;
+    border-radius: 100vh;
+    margin-top: 5px;
+    cursor: default;
+    margin-left: 5px;
+}
+.messages_indicator {
+    display: flex;
+    text-decoration: none;
+    place-content: center;
+    place-items: center;
+    background-color: hsl(var(--light-colour));
+    color: white;
+}
+.heart_indicator {
+    --heart-colour: 356, 100%, 66%;
+
+    background-color: hsl(var(--heart-colour));
+    background-image: url('./Icons/heart.png');
+    background-position-x: 50%;
+    background-position-y: 50%;
+    background-size: 70%;
+    background-repeat: no-repeat;
+}
