@@ -207,8 +207,8 @@ export default function App() {
                 visibility: state.isSideMenuShown ? 'visible' : 'hidden'
             }} />
             <div class='black_cover info_menu_cover' onClick={HandleBlackCoverClick} style={{
-                opacity: state.isInfoMenuShown && state.selectedMessage ? '' : 0,
-                visibility: state.isInfoMenuShown && state.selectedMessage ? '' : 'hidden'
+                opacity: state.isInfoMenuShown && !state.isSideMenuShown && state.selectedMessage ? '' : 0,
+                visibility: state.isInfoMenuShown && !state.isSideMenuShown && state.selectedMessage ? '' : 'hidden'
             }} />
 
             <MessageSection appDispatch={dispatch} appState={state} messages={DATA.messages} isBlurred={state.isSideMenuShown} />
