@@ -1,46 +1,49 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useReducer } from 'react';
 import MessageSection from './MessageSection.js';
 import ChatSection from './ChatSection.js';
 import SideMenu from './SideMenu.js';
+import InfoMenu from './InfoMenu.js';
 import ashame_s_logo from './Images/ashame_s_logo.png';
+import { PickRandomTime } from './Time.js';
 import './style.css';
 
 const DATA = {
     messages: [
         {
-            sender: '☺☻ aleeh ☻☺',
-            content: 'IKR? it was fun!'
+            sender: { name: '☺☻ aleeh ☻☺' },
+            content: 'IKR? it was fun!',
+            arrived: false
         },
         {
-            sender: 'Hisham S',
+            sender: { name: 'Hisham S' },
             content: 'I\'m so concerned \'bout it, what\'s your opinion on it tho?',
             read: true,
             includesHeart: true
         },
         {
-            sender: 'doha haj',
+            sender: { name: 'doha haj' },
             content: 'how did you even make it? it\'s on fire!',
             recieved: true,
             messagesCount: 3,
             includesHeart: true,
         },
         {
-            sender: 'Wi11iam',
+            sender: { name: 'Wi11iam' },
             content: 'AYO TF HOW!?',
             recieved: true,
             messagesCount: 13
         },
         {
-            sender: 'Z4HR4 ♥',
+            sender: { name: 'Z4HR4 ♥' },
             content: 'Wanna fight?'
         },
         {
-            sender: 'Yak',
-            content: 'Alright, that sounds fun..',
+            sender: { name: 'Yak' },
+            draftMessage: 'Alright, that sounds fun..',
             draft: true
         },
         {
-            sender: 'Mei',
+            sender: { name: 'Mei' },
             content: 'Check Out My New Tech!!',
             archived: true,
             recieved: true,
@@ -48,44 +51,44 @@ const DATA = {
             includesHeart: true
         },
         {
-            sender: 'Aito',
+            sender: { name: 'Aito' },
             content: 'Sounds boring >:O',
             archived: true,
             recieved: true
         },
         {
-            sender: 'Hush Hush',
+            sender: { name: 'Hush Hush' },
             content: 'Whatever.',
             archived: true,
             read: true
         },
         {
-            sender: 'Traumatized Dot Com',
+            sender: { name: 'Traumatized Dot Com' },
             content: 'STOP SENDING ME CORPSES PICS YOU DAMN IDIOT@$!',
             recieved: true,
         },
         {
-            sender: 'Entire Hero',
+            sender: { name: 'Entire Hero' },
             content: 'You shall learn this okay?',
             archived: true,
             recieved: true,
             read: true
         },
         {
-            sender: 'Rim',
+            sender: { name: 'Rim' },
             content: 'Fuck you.',
             archived: true,
             recieved: true,
             read: true
         },
         {
-            sender: 'Dad',
+            sender: { name: 'Dad' },
             content: 'where tf r u',
             recieved: true,
             messagesCount: 2
         },
         {
-            sender: 'Mom',
+            sender: { name: 'Mom' },
             content: 'Mom come\'n where are you? fr.'
         }
     ],
@@ -104,98 +107,114 @@ export function PickRandomColour() {
     return COLOURS[Math.floor(Math.random() * COLOURS.length)];
 }
 
+export function PickRandomPhoneNumber() {
+    return +('963' + Math.random()).replace('.', '').substring(0, 12);
+}
+
+export function DisplayPhoneNumber(phone) {
+    let result = '+';
+    Array.from((phone + '')).forEach((c, i) => {
+        result += c;
+        if ((i + 1) % 3 === 0) { result += ' '; }
+    });
+    return result;
+}
+
+export function IsEmpty(string) {
+    return [...string].every(c => c === ' ');
+}
+
 export const APP_ACTIONS = {
-    // Selects a message from the Message Section.
+    // Gets called by the message section to tell other sections a message has been selected.
     SELECT_MESSAGE: 'select_message',
-    // Deselects the current selected message from the Message Section.
+    // Gets called by the message section to tell other sections the current selected message has been deselected.
     DESELECT_MESSAGE: 'deselect_message',
-    // Sets the setter function of updating the selected message in the Chat Section.
-    SET_SELECTED_UPDATING: 'set_selected_updating',
-    // Sets the setter function of toggling the Side Menu.
-    SET_TOGGLE_SIDE_MENU: 'set_toggle_side_menu',
-    // Sets the setter function of toggling the blurred state of the Message Section.
-    SET_TOGGLE_MESSAGES_BLURRED: 'set_toggle_messages_blurred',
-    // Toggles the state of the Side Menu.
-    TOGGLE_SIDE_MENU: 'toggle_side_menu'
+    // Simply toggles the Side Menu.
+    TOGGLE_SIDE_MENU: 'toggle_side_menu',
+    // Simply toggles the Side Menu.
+    TOGGLE_INFO_MENU: 'toggle_info_menu',
+    // Rerenders the messages to ensure data renders well.
+    RERENDER: 'rerender'
 };
 
 function Reducer(state, { type, payload }) {
     switch (type) {
         case APP_ACTIONS.SELECT_MESSAGE:
-            state.UpdateSelected?.(payload.message);
             return {
                 ...state,
-                selectedMessage: payload.message,
-                selectedMessageToggle: payload.Toggle
+                selectedMessage: payload.message
             };
         case APP_ACTIONS.DESELECT_MESSAGE:
-            state.UpdateSelected?.(null);
-            state.selectedMessageToggle?.(false);
             return {
                 ...state,
-                selectedMessage: null,
-                selectedMessageToggle: null
-            };
-        case APP_ACTIONS.SET_SELECTED_UPDATING:
-            return {
-                ...state,
-                UpdateSelected: payload.UpdateSelected
-            };
-        case APP_ACTIONS.SET_TOGGLE_SIDE_MENU:
-            return {
-                ...state,
-                ToggleSideMenu: payload.ToggleSideMenu
-            };
-        case APP_ACTIONS.SET_TOGGLE_MESSAGES_BLURRED:
-            return {
-                ...state,
-                ToggleMessagesBlurred: payload.ToggleMessagesBlurred
+                selectedMessage: null
             };
         case APP_ACTIONS.TOGGLE_SIDE_MENU:
+            let sideMenuQuery = document.querySelector(payload.value ? '.side_menu' : '.message_section');
+            sideMenuQuery.tabIndex = 0;
+            sideMenuQuery.focus();
+            sideMenuQuery.tabIndex = -1;
+
             return {
                 ...state,
-                isSideMenuOpen: payload.isSideMenuOpen
+                isSideMenuShown: payload.value
             };
+        case APP_ACTIONS.TOGGLE_INFO_MENU:
+            setTimeout(() => {
+                let infoMenuQuery = document.querySelector(payload.value ? '.info_menu' : '.message_section');
+                infoMenuQuery.tabIndex = 0;
+                infoMenuQuery.focus();
+                infoMenuQuery.tabIndex = -1;
+            }, 500);
+
+            return {
+                ...state,
+                isInfoMenuShown: payload.value
+            };
+        case APP_ACTIONS.RERENDER:
+            return {...state};
         default:
             return state;
     }
 }
 
+export const AppContext = React.createContext({});
+
 export default function App() {
     const [state, dispatch] = useReducer(Reducer, {});
 
     DATA.messages.forEach(message => {
-        message.time ??= {
-            hour: Math.floor(Math.random() * 24),
-            minute: Math.floor(Math.random() * 60),
-            year: Math.floor(Math.random() * 2) + 2021,
-            month: Math.floor(Math.random() * 12),
-            day: Math.floor(Math.random() * 31)
-        };
+        message.time ??= PickRandomTime();
+        message.iconColour ??= PickRandomColour();
+        message.sender.phone ??= PickRandomPhoneNumber();
+        message.sender.bio ??= 'Here goes my bio. ~';
+        message.sender.lastSeenTime ??= PickRandomTime();
     });
 
-    useEffect(() => {
-        state.setSelectedMessage?.(state.selectedMessage);
-        state.setSelectedMessageChat?.(state.selectedMessage);
-    }, [state.selectedMessage]);
-
-    function HandleKeyDown(e) {
-        console.log(state);
-        if (e.key === 'Escape' && !state.isSideMenuOpen) {
-            dispatch({ type: APP_ACTIONS.DESELECT_MESSAGE });
-            let page = document.getElementById('page');
-
-            page.tabIndex = 0;
-            page.focus();
-            page.tabIndex = -1;
+    function HandleBlackCoverClick() {
+        if (state.isSideMenuShown) {
+            dispatch({ type: APP_ACTIONS.TOGGLE_SIDE_MENU, payload: { value: false } });
+        }
+        else if (state.isInfoMenuShown) {
+            dispatch({ type: APP_ACTIONS.TOGGLE_INFO_MENU, payload: { value: false } });
         }
     }
 
     return (
-        <div id='page' onKeyDown={HandleKeyDown}>
-            <MessageSection messages={DATA.messages} appDispatch={dispatch} ToggleSideMenu={state.ToggleSideMenu} />
-            <ChatSection selectedMessage={state.selectedMessage} appDispatch={dispatch} />
-            <SideMenu user={DATA.user} appDispatch={dispatch} ToggleMessagesBlurred={state.ToggleMessagesBlurred} />
+        <div id='page'>
+            <div class='black_cover side_menu_cover' onClick={HandleBlackCoverClick} style={{
+                opacity: state.isSideMenuShown ? '' : 0,
+                visibility: state.isSideMenuShown ? 'visible' : 'hidden'
+            }} />
+            <div class='black_cover info_menu_cover' onClick={HandleBlackCoverClick} style={{
+                opacity: state.isInfoMenuShown ? '' : 0,
+                visibility: state.isInfoMenuShown ? '' : 'hidden'
+            }} />
+
+            <MessageSection appDispatch={dispatch} appState={state} messages={DATA.messages} isBlurred={state.isSideMenuShown} />
+            <ChatSection appDispatch={dispatch} appState={state} selectedMessage={state.selectedMessage} isBlurred={state.isSideMenuShown} />
+            <InfoMenu appDispatch={dispatch} appState={state} selectedMessage={state.selectedMessage} isShown={state.isInfoMenuShown} isBlurred={state.isSideMenuShown} />
+            <SideMenu appDispatch={dispatch} appState={state} user={DATA.user} isShown={state.isSideMenuShown} />
         </div>
     );
 }

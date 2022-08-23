@@ -1,0 +1,174 @@
+.black_cover.info_menu_cover {
+    opacity: 0;
+    visibility: hidden;
+}
+.info_menu {
+    --icon-size: 60px;
+
+    background-color: hsl(var(--secondary-colour));
+    min-width: 300px;
+    width: 30%;
+    max-width: 50%;
+    resize: horizontal;
+    overflow: hidden;
+    display: grid;
+    direction: rtl;
+    opacity: 1;
+    transition: opacity 0.5s;
+    height: 100vh;
+}
+.info_menu > div {
+    direction: ltr;
+    overflow-y: auto;
+}
+.info_menu > div::-webkit-scrollbar {
+    width: 5px;
+}
+.info_menu > div::-webkit-scrollbar,
+.info_menu > div::-webkit-scrollbar-track {
+    background-color: hsl(var(--main-colour));
+    border-radius: 100vh;
+}
+.info_menu > div::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--fore-colour));
+    border-radius: 100vh;
+}
+
+.info_menu .header {
+    color: white;
+    display: grid;
+    grid-template-columns: auto 25px;
+    grid-template-rows: auto auto;
+    border-bottom: 10px solid hsl(var(--fore-colour));
+    padding: 20px;
+}
+.info_menu .header .user_info {
+    display: grid;
+    grid-template-columns: 60px auto;
+    place-items: center;
+    margin-top: 20px;
+    justify-content: left;
+    gap: 20px;
+}
+.info_menu .header .user_info .icon {
+    font-size: calc(var(--font-size) + 0.5rem);
+}
+.info_menu .header .user_info .user_details :nth-child(1) {
+    font-size: calc(var(--font-size) + 0.5rem);
+}
+.info_menu .header .user_info .user_details :nth-child(2) {
+    color: hsl(var(--sub-fore-colour));
+}
+
+.info_menu .section_icon {
+    width: 25px;
+    height: 25px;
+}
+
+.info_menu .details {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 10px solid hsl(var(--fore-colour));
+}
+.info_menu .details .info {
+    display: grid;
+    grid-template-columns: 60px auto;
+    margin: 20px;
+    margin-bottom: 0;
+}
+.info_menu .details .info div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.info_menu .details .notification {
+    display: grid;
+    grid-template-columns: 60px auto;
+    margin-top: 7.5px;
+    color: white;
+    padding: 20px;
+    padding-top: 0;
+    padding-bottom: 7.5px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+.info_menu .details .notification:is(:hover, :focus) {
+    background-color: hsl(var(--fore-colour));
+}
+.info_menu .details .notification div {
+    border-top: 1px solid hsl(var(--main-colour));
+}
+.info_menu .details .notification:is(:hover, :focus) div {
+    border-top: 0;
+    margin-top: 1px;
+}
+.info_menu .details .notification * {
+    padding-top: 10px;
+}
+.info_menu .details .user_phone,
+.info_menu .details .user_bio {
+    color: white;
+}
+
+.info_menu .info_button {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    padding: 7.5px;
+    align-items: center;
+    justify-content: left;
+    color: white;
+    padding-left: 20px;
+    cursor: pointer;
+}
+.info_menu .info_button:is(:hover, :focus) {
+    background-color: hsl(var(--fore-colour));
+}
+.info_menu .info_button .section_icon {
+    margin-right: 30px;
+}
+.info_menu .media_buttons,
+.info_menu .technical_buttons {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.info_menu .media_buttons {
+    border-bottom: 10px solid hsl(var(--fore-colour));
+}
+.info_menu .technical_buttons .info_button:last-child {
+    color: hsl(var(--alert-colour));
+}
+.info_menu .technical_buttons .info_button:last-child img {
+    filter: sepia() hue-rotate(289.5deg) saturate(195) brightness(1.1);
+}
+
+@media (max-width: 935px) {
+    .black_cover.info_menu_cover {
+        opacity: 0.5;
+        z-index: 2;
+        visibility: visible;
+    }
+    .info_menu {
+        position: absolute;
+        top: 0;
+        transform: translate(50%, 5%);
+        border: 1px solid hsl(var(--main-colour));
+        border-radius: 3vh;
+        height: 90%;
+        resize: none;
+        justify-self: stretch;
+        z-index: 3;
+        max-width: 50%;
+        width: 50%;
+    }
+}
+@media (max-width: 600px) {
+    .info_menu {
+        max-width: 100%;
+        width: 100%;
+        transform: none;
+        height: 100%;
+        border: 0;
+        border-radius: 0;
+        transition: transform 0.5s, width 0.5s, height 0.5s;
+    }
+}

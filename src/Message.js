@@ -8,9 +8,10 @@ import { MESSAGE_SECTION_ACTIONS } from './MessageSection.js';
 import Icon from './Icon.js';
 
 export default function Message({
+    appDispatch = null,
     sectionDispatch = null,
     message = null,
-    sender = 'unknown',
+    sender = { name: 'unknown', phone: '+963 000 000 000', bio: '...' },
     content = 'Hello.',
     iconURL = '',
     time = { hour: 12, minute: 0, year: 2022, month: 1, day: 1 },
@@ -22,14 +23,14 @@ export default function Message({
     includesHeart = false,
     selected = false,
     archived = false,
-    draft = false,
     blank = false,
-    isBlurred = false
+    isBlurred = false,
+    draftMessage = null
 }) {
     if (message) { SetUp(); }
     const [isSelected, setSelected] = useState(selected);
 
-    let senderName = (sender).substring(0, 50);
+    let senderName = sender.name.substring(0, 50);
 
     function SetUp() {
         sender = message.sender ?? sender;
@@ -44,36 +45,40 @@ export default function Message({
         includesHeart = message.includesHeart ?? includesHeart;
         selected = message.selected ?? selected;
         archived = message.archived ?? archived;
-        draft = message.draft ?? draft;
         blank = message.blank ?? blank;
+        draftMessage = message.draftMessage ?? draftMessage;
     }
 
     function ToggleSelection(value) {
         setSelected(value);
         if (!value) { return; }
-        sectionDispatch?.({ type: MESSAGE_SECTION_ACTIONS.SELECT, payload: { message: message, Toggle: ToggleSelection } });
+        sectionDispatch?.({ type: MESSAGE_SECTION_ACTIONS.SELECT, payload: { message: message, Toggle: ToggleSelection, appDispatch: appDispatch } });
     }
     
     return (
         <div class='message' tabIndex={isBlurred ? -1 : 0} style={{
-            backgroundColor: isSelected ? 'hsl(var(--selection-colour))' : 'hsl(var(--fore-colour))'
+            backgroundColor: isSelected ? 'hsl(var(--selection-colour))' : ''
         }} onFocus={e => ToggleSelection(true)}>
             <Icon URL={iconURL} name={senderName} colour={iconColour} />
             <div class='displayer'>
                 <abbr class='sender' title={senderName}>{senderName}</abbr>
                 <div class='time_container'>
+                    { !blank && <Time time={time} isSelected={isSelected} /> }
                     {
-                        !recieved && !draft && !blank &&
+                        !recieved && !draftMessage && !blank &&
                         <abbr title={ !arrived ? 'Waiting for network...' : !read ? 'Arrived but hasn\'t been read yet.' : 'Has been read.' }>
                             <img src={ !arrived ? clock_icon : !read ? checked_icon : double_checked_icon }
-                                alt={ !arrived ? 'cl' : !read ? 'ch' : 'dc' } />
+                                alt={ !arrived ? 'cl' : !read ? 'ch' : 'dc' } style={{
+                                    filter: isSelected ? 'none' : ''
+                                }}/>
                         </abbr>
                     }
-                    { !blank && <Time time={time} read={read} arrived={arrived} /> }
                 </div>
                 <div class='content_displayer'>
-                    {draft && <div class='draft_indicator'>draft</div>}
-                    <abbr class='content' title={content}>{content}</abbr>
+                    {draftMessage && <div class='draft_indicator'>draft</div>}
+                    <abbr class='content' title={draftMessage || content} style={{
+                        color: isSelected ? 'white' : ''
+                    }}>{draftMessage || content}</abbr>
                 </div>
                 <div class='indicators'>
                     {
@@ -81,7 +86,7 @@ export default function Message({
                         <abbr class='heart_indicator' title='A message of yours is got hearted.'></abbr>
                     }
                     {
-                        recieved && messagesCount > 0 && !read && !draft && !blank &&
+                        recieved && messagesCount > 0 && !read && !draftMessage && !blank &&
                         <abbr class='messages_indicator' title={messagesCount + ' unread messages.'}>
                             { messagesCount <= 9 && messagesCount }
                         </abbr>

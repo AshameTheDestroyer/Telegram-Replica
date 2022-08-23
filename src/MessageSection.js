@@ -2,23 +2,35 @@ import React, { useState, useReducer, useRef, useEffect } from 'react';
 import Message from './Message.js';
 import './style.css';
 import './message_section.css';
-import { APP_ACTIONS, PickRandomColour } from './App.js';
 import archive_logo from './Icons/archive.png';
+import { APP_ACTIONS } from './App.js';
 
 export const MESSAGE_SECTION_ACTIONS = {
-    SELECT: 'select'
+    SELECT: 'select',
+    DESELECT: 'deselect'
 };
 
 function Reducer(state, { type, payload }) {
     switch (type) {
         case MESSAGE_SECTION_ACTIONS.SELECT:
-            if (state.selectedMessage !== payload.message)
-            { state.Toggle?.(false); }
-            state.appDispatch?.({ type: APP_ACTIONS.SELECT_MESSAGE, payload: payload });
+            if (state.selectedMessage) { state.selectedMessageToggle(false); }
+
+            payload.appDispatch({ type: APP_ACTIONS.SELECT_MESSAGE, payload: payload });
+            
             return {
                 ...state,
                 selectedMessage: payload.message,
-                Toggle: payload.Toggle
+                selectedMessageToggle: payload.Toggle
+            };
+        case MESSAGE_SECTION_ACTIONS.DESELECT:
+            if (state.selectedMessage) { state.selectedMessageToggle(false); }
+
+            payload.appDispatch({ type: APP_ACTIONS.DESELECT_MESSAGE });
+            
+            return {
+                ...state,
+                selectedMessage: null,
+                selectedMessageToggle: null
             }
         default:
             return state;
@@ -27,44 +39,50 @@ function Reducer(state, { type, payload }) {
 
 export default function MessageSection({
     appDispatch = null,
-    messages = [],
-    ToggleSideMenu = () => {}
+    appState = {},
+    isBlurred = false,
+    messages = []
 }) {
-    messages.forEach(message => {
-        message.id ??= Math.random();
-        message.iconColour ??= PickRandomColour();
-        message.selected = false;
-    });
+    const [, dispatch] = useReducer(Reducer, {});
+
     const [searchedValue, setSearchedValue] = useState('');
-    const [state, dispatch] = useReducer(Reducer, { selectedMessage: null, appDispatch: appDispatch });
     const searchInputRef = new useRef();
-    const GetArchivedMessages = () => messages.filter(message => message.archived);
-    const [isBlurred, setBlurred] = useState(false);
 
     useEffect(() => {
-        state.appDispatch?.({ type: APP_ACTIONS.SET_TOGGLE_MESSAGES_BLURRED, payload: { ToggleMessagesBlurred: ToggleBlurred } });
+        document.querySelector('.message_section').addEventListener('keydown', HandleKeyDown);
+        document.querySelector('.chat_section').addEventListener('keydown', HandleKeyDown);
     }, []);
+
+    messages.forEach(message => {
+        message.id ??= Math.random();
+        message.selected = false;
+    });
+
+    const GetArchivedMessages = () => messages.filter(message => message.archived);
+
+    function HandleKeyDown(e) {
+        if (e.key === 'Escape') {
+            dispatch({ type: MESSAGE_SECTION_ACTIONS.DESELECT, payload: { appDispatch } });
+        }
+    }
 
     function GetArchivedMessageSenders() {
         let result = '';
         let archivedMessages = GetArchivedMessages();
         archivedMessages.forEach((message, i) => {
-            result += message.sender + (i < archivedMessages.length - 1 ? i === archivedMessages.length - 2 ? ' and ' : ', ' : '.');
+            result += message.sender.name + (i < archivedMessages.length - 1 ? i === archivedMessages.length - 2 ? ' and ' : ', ' : '.');
         });
         return result;
     }
 
-    function ToggleBlurred(value) {
-        setBlurred(value);
-    }
-
     function OpenSideMenu() {
-        ToggleSideMenu?.(true);
-        ToggleBlurred(true);
+        appDispatch({ type: APP_ACTIONS.TOGGLE_SIDE_MENU, payload: { value: true } });
     }
 
     return (
-        <nav class="message_section">
+        <nav class="message_section" style={{
+            'resize': isBlurred ? 'none' : ''
+        }}>
             <div class="header">
                 <button class='side_menu_button' onClick={OpenSideMenu} tabIndex={isBlurred ? -1 : 0}></button>
                 <div class='search_input_container'>
@@ -83,7 +101,7 @@ export default function MessageSection({
                 {
                     searchedValue === '' && GetArchivedMessages().length > 0 &&
                     <Message message={{
-                        sender: 'Archived chats',
+                        sender : { name: 'Archived chats' },
                         content: GetArchivedMessageSenders(),
                         iconURL: archive_logo,
                         blank: true,
@@ -91,9 +109,9 @@ export default function MessageSection({
                 }
                 {
                     messages.length > 0 ?
-                    messages.filter(message => (searchedValue !== '' || !message.archived) && message.sender.toLowerCase().includes(searchedValue.toLowerCase()))
+                    messages.filter(message => (searchedValue !== '' || !message.archived) && message.sender.name.toLowerCase().includes(searchedValue.toLowerCase()))
                     .map(message =>
-                        <Message message={message} key={message.id} sectionDispatch={dispatch} isBlurred={isBlurred} />
+                        <Message message={message} key={message.id} sectionDispatch={dispatch} isBlurred={isBlurred} appDispatch={appDispatch} />
                     ) : (
                         <div class="loading_message">Loading...</div>
                     )

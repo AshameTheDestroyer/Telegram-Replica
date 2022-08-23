@@ -1,17 +1,22 @@
 .message_section {
-    --padding: 10px;
-
     position: relative;
     background-color: hsl(var(--secondary-colour));
-    height: calc(100vh - var(--padding) * 2);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     min-width: 260px;
-    width: 28%;
-    padding: var(--padding);
+    width: 20%;
+    max-width: 50%;
+    resize: horizontal;
+    overflow: hidden;
+    transition: 0.5s;
+    padding-right: 5px;
 }
 
 .message_section .header {
     display: flex;
     place-items: center;
+    padding: 10px;
 }
 
 .side_menu_button {
@@ -19,25 +24,19 @@
     background-position: 50%;
     background-size: 70%;
     background-repeat: no-repeat;
-    width: 40px;
-    height: 40px;
+    width: 5px;
+    height: 5px;
     background-color: transparent;
     border: 0;
     cursor: pointer;
-    filter:
-        opacity(0.25)
-        drop-shadow(0 0 0 hsl(var(--fore-colour)))
-        saturate(10);
+    filter: var(--sub-fore-colour-filter);
     margin-right: 5px;
     border-radius: 100vh;
     padding: 15px;
-    transition: 0.25s;
+    transition: 0.4s;
 }
-.side_menu_button:hover {
-    filter:
-        opacity(0.5)
-        drop-shadow(0 0 0 hsl(var(--sub-fore-colour)))
-        saturate(5);
+.side_menu_button:is(:hover, :focus) {
+    filter: var(--sub-fore-colour-filter-on);
 }
 .side_menu_button:focus {
     background-color: hsl(var(--main-colour));
@@ -65,22 +64,22 @@
 }
 .clear_input_button {
     position: absolute;
-    background-image: url('./Icons/delete.png');
+    background-image: url('./Icons/delete_2.png');
     background-repeat: no-repeat;
     background-position-x: 50%;
     background-position-y: 50%;
     background-size: 80%;
-    width: 20px;
-    height: 20px;
+    width: 10px;
+    height: 10px;
     background-color: transparent;
     border: 0;
     filter:
         opacity(0.25)
         drop-shadow(0 0 0 hsl(var(--fore-colour)))
         saturate(10);
-    top: calc(50% - 10px);
+    top: calc(50% - 5px);
     right: 5px;
-    transition: 0.5s;
+    transition: 0.4s;
     cursor: pointer;
 }
 .clear_input_button:hover {
@@ -91,15 +90,16 @@
 }
 
 .message_renderer {
-    height: calc(100% - var(--padding) * 4);
-    overflow-y: hidden;
-    overflow-x: hidden;
-    padding-right: 10px;
-    margin-top: 10px;
+    height: 100%;
+    overflow: hidden;
     transition: 0.1s;
 }
 .message_renderer:is(:hover, :focus-within) {
     overflow-y: auto;
+    width: calc(100% + 5px);
+}
+.message_renderer::-webkit-scrollbar {
+    width: 5px;
 }
 .message_renderer::-webkit-scrollbar,
 .message_renderer::-webkit-scrollbar-track {
@@ -116,4 +116,14 @@
     place-content: center;
     place-items: center;
     height: 100%;
+}
+
+@media (max-width: 600px) {
+    .message_section {
+        position: fixed;
+        left: 0;
+        max-width: 100%;
+        width: 100%;
+        resize: none;
+    }
 }

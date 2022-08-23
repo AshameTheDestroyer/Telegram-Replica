@@ -1,9 +1,11 @@
 * {
     font-family: 'Segoe UI Semibold';
+    box-sizing: content-box;
 }
 body {
     font-size: var(--font-size);
     max-height: 100vh;
+    max-width: 100vw;
     margin: 0px;
     background-color: hsl(var(--main-colour));
     color: hsl(var(--sub-fore-colour));
@@ -15,11 +17,30 @@ body {
     --sub-fore-colour: 211, 17%, 52%;
     --light-colour: 180, 41%, 58%;
     --selection-colour: 210, 47%, 32%;
+    --active-colour: 205, 68%, 56%;
+    --alert-colour: 357, 82%, 57%;
 
     --font-size: 0.8rem;
+
+    --sub-fore-colour-filter:
+        opacity(0.25)
+        drop-shadow(0 0 0 hsl(var(--fore-colour)))
+        saturate(10);
+    --sub-fore-colour-filter-on:
+        opacity(0.5)
+        drop-shadow(0 0 0 hsl(var(--sub-fore-colour)))
+        saturate(5);
 }
 #page {
+    position: absolute;
     display: flex;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+body::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
 }
 body::-webkit-scrollbar,
 body::-webkit-scrollbar-track {

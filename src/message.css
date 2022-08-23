@@ -3,12 +3,7 @@
 
     position: relative;
     display: flex;
-    background-color: hsl(var(--fore-colour));
-    margin-top: 5px;
-    margin-bottom: 10px;
-    margin-left: 2.5px;
     padding: 5px;
-    border-radius: 2vh;
     width: calc(100% - 10px);
     height: 55px;
     transition: 0.25s;
@@ -25,7 +20,7 @@
     height: fit-content;
 }
 
-.sender {
+.message .sender {
     color: white;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -40,7 +35,7 @@
 
 .time_container {
     display: flex;
-    place-content: end;
+    flex-direction: row-reverse;
     height: fit-content;
 }
 .time {
@@ -78,7 +73,7 @@
     overflow: hidden;
 }
 .draft_indicator {
-    color:#ee0808;
+    color: hsl(var(--alert-colour));
 }
 
 .indicators {

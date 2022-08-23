@@ -1,14 +1,18 @@
 .chat_section {
     background-color: hsl(var(--main-colour));
-    display: flex;
-    width: 71%;
-    height: 100vh;
+    display: grid;
+    width: 100%;
+    border-left: 1px solid hsl(var(--main-colour));
+    border-right: 1px solid hsl(var(--main-colour));
+    transition: 0.5s;
 }
 
 .empty {
     display: flex;
     place-content: center;
     width: 100%;
+    grid-row: 1;
+    grid-column: 1;
 }
 .select_chat_message {
     background-color: hsl(var(--secondary-colour));
@@ -24,12 +28,211 @@
 
 .chat {
     width: 100%;
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    transition: 0.5s;
+    grid-row: 1;
+    grid-column: 1;
+    z-index: 1;
 }
 
 .chat .header {
+    display: grid;
+    grid-template-columns: auto 40px 40px 40px 40px;
+    place-items: center;
     background-color: hsl(var(--secondary-colour));
-    height: 3rem;
-    padding: 20px;
-    font-size: calc(var(--font-size) + 0.5rem);
+    padding: 10px;
+    height: calc(var(--font-size) * 4);
+}
+.chat .header .sender {
+    justify-self: flex-start;
+    cursor: pointer;
+}
+.chat .header .sender_name {
     color: white;
+    font-size: calc(var(--font-size) + 0.5rem);
+    transition: 0.25s;
+}
+.chat .header .sender_time {
+    margin-top: 5px;
+    transition: 0.25s;
+}
+
+.icon_button {
+    --filter: var(--sub-fore-colour-filter);
+    --hover-filter: var(--sub-fore-colour-filter-on);
+    --colour: transparent;
+
+    transition: 0.4s;
+    background-color: var(--colour);
+    width: 30px;
+    height: 30px;
+    border-radius: 1vh;
+    display: flex;
+    align-items: center;
+    padding-bottom: 1px;
+}
+.icon_button button {
+    background-repeat: no-repeat;
+    background-position-x: 50%;
+    background-position-y: 50%;
+    background-size: contain;
+    background-color: transparent;
+    width: 20px;
+    height: 20px;
+    border: 0;
+    filter: var(--filter);
+    cursor: pointer;
+    transition: 0.4s;
+}
+.icon_button:is(:hover, :focus) button {
+    filter: var(--hover-filter);
+}
+.chat .icon_button.back {
+    transform: rotate(90deg);
+}
+.chat .icon {
+    width: 40px;
+    height: 40px;
+}
+.chat .icon_button.back,
+.chat .icon {
+    opacity: 0;
+    visibility: hidden;
+    display: none;
+}
+
+.pinned_messages {
+    background-color: hsl(var(--fore-colour));
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: auto auto;
+    padding: 10px;
+    border-top: 1px solid hsl(var(--main-colour));
+    border-bottom: 1px solid hsl(var(--main-colour));
+    max-height: fit-content;
+}
+.pinned_messages .scroll_bar {
+    height: 100%;
+    width: 3px;
+    background-color: hsl(var(--active-colour));
+    border-radius: 100vh;
+    margin-right: 10px;
+}
+.pinned_messages .text {
+    cursor: pointer;
+}
+.pinned_messages .label {
+    color: hsl(var(--active-colour));
+}
+.pinned_messages .messages {
+    transition: 0.25s;
+    line-break: anywhere;
+    text-overflow: ellipsis;
+    display: block;
+    max-height: calc(var(--font-size) + 0.3rem);
+    overflow: hidden;
+    text-decoration: none;
+}
+.pinned_messages .icon_button {
+    align-self: center;
+}
+
+.main_section {
+    background-image: url('./Images/chat_background.jpg');
+    background-position-x: 50%;
+    background-position-y: 50%;
+    background-size: 50%;
+}
+
+.text_section {
+    background-color: hsl(var(--fore-colour));
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 40px auto 40px 40px;
+    grid-template-rows: 1fr;
+    place-items: center;
+    border-top: 1px solid hsl(var(--main-colour));
+}
+.text_section .icon_button button {
+    width: 25px;
+    height: 25px;
+}
+.text_section .text_input_container {
+    position: relative;
+    place-self: stretch;
+}
+.text_section .text_input {
+    border: 0;
+    background-color: transparent;
+    color: white;
+    padding: 7px;
+    font-size: var(--font-size);
+    border-radius: 1vh;
+    width: calc(100% - 14px);
+}
+.text_section .text_input_placeholder {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 10px;
+    transition: 0.2s;
+}
+.text_section .icon_button.send,
+.text_section .icon_button.record {
+    grid-column: 4;
+    grid-row: 1;
+}
+
+@media (max-width: 720px) {
+    .chat .header .sender_name {
+        font-size: var(--font-size);
+    }
+    .chat .header .sender_time {
+        margin-top: 0;
+        font-size: calc(var(--font-size) - 0.15rem);
+    }
+    .chat .header .icon_button.section {
+        opacity: 0;
+        visibility: hidden;
+        display: none;
+    }
+    .chat .header {
+        grid-template-columns: auto 25px 25px 25px;
+    }
+    .chat .pinned_messages .icon_button button {
+        margin-left: 5px;
+    }
+
+    .text_section {
+        grid-template-columns: 35px auto 35px 35px;
+    }
+}
+@media (max-width: 600px) {
+    .chat {
+        position: absolute;
+        left: 0;
+        height: 100%;
+    }
+    .chat .header .sender_name {
+        font-size: calc(var(--font-size) + 0.5rem);
+    }
+    .chat .header .sender_time {
+        margin-top: 5px;
+        font-size: var(--font-size);
+    }
+    .chat .header {
+        grid-template-columns: 20px 50px auto 35px 35px 35px;
+    }
+    .chat .icon_button.back,
+    .chat .icon {
+        opacity: 1;
+        visibility: inherit;
+        display: block;
+    }
+}
+@media (max-width: 1000px) {
+    .chat .header {
+        height: fit-content;
+    }
 }

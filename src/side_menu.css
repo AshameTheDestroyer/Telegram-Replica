@@ -5,27 +5,29 @@
     height: 100%;
     opacity: 0.5;
     transition: 0.5s;
+    z-index: 4;
 }
 
 .side_menu {
     position: absolute;
     background-color: hsl(var(--secondary-colour));
     left: 0;
-    transform: translateX(0);
-    width: 20%;
-    min-width: 270px;
+    max-width: 50%;
+    min-width: 200px;
     height: 100%;
     color: white;
     transition: 0.5s;
-    display: grid;
-    place-content: start;
+    resize: horizontal;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 5;
 }
 
 .side_menu .header {
     position: relative;
     padding-bottom: 15px;
     padding-top: 25px;
-    width: 100%;
     border-bottom: 1px solid hsl(var(--main-colour));
 }
 .side_menu .header .icon {
@@ -33,18 +35,26 @@
     height: 40px;
     margin-left: 20px;
 }
+.side_menu .header .icon_button.back {
+    position: absolute;
+    top: 35px;
+    right: 15px;
+    transform: rotate(-90deg);
+    opacity: 0;
+    visibility: hidden;
+}
 .side_menu .header .user_data {
-    display: grid;
-    grid-template-columns: repeat(2, auto);
+    position: relative;
+    display: flex;
     cursor: pointer;
     border: 0;
-    width: 100%;
     background-color: transparent;
     text-align: start;
     margin-top: 20px;
     color: white;
     padding-left: 15px;
     padding-right: 15px;
+    width: 100%;
 }
 .side_menu .header .icon_container {
     width: fit-content;
@@ -53,24 +63,24 @@
     color: hsl(var(--sub-fore-colour));
 }
 .user_data .accounts_toggle_button {
+    position: absolute;
     background-image: url('./Icons/combo_box_arrow.png');
     background-position-x: 50%;
     background-position-y: 50%;
     background-repeat: no-repeat;
     background-size: contain;
-    background-color: transparent;
-    border: 0;
+    right: 50px;
     width: 25px;
     height: 25px;
     align-self: center;
     justify-self: end;
     cursor: pointer;
     transition: 0.25s;
-    filter:
-        opacity(0.25)
-        drop-shadow(0 0 0 hsl(var(--fore-colour)))
-        saturate(10);
-    transform: rotate(0deg);
+    filter: var(--sub-fore-colour-filter);
+    transform: rotateZ(0deg);
+}
+.user_data:is(:hover, :focus) .accounts_toggle_button {
+    filter: var(--sub-fore-colour-filter-on);
 }
 
 .accounts_wrapper {
@@ -78,6 +88,9 @@
     overflow: hidden;
     transition: 0.25s;
     border-bottom: 1px solid hsl(var(--main-colour));
+    display: flex;
+    place-items: center;
+    min-height: 45px;
 }
 .accounts_container {
     background-color: transparent;
@@ -87,12 +100,12 @@
     display: flex;
     place-items: center;
     transform: translateY(0);
-    transition: 0.25s;
+    transition: 0.4s;
     width: 100%;
-    padding: 20px;
+    padding: 7.5px;
     cursor: pointer;
     padding-left: 15px;
-    height: 100%;
+    height: fit-content;
 }
 .accounts_container:is(:hover, :focus-within) {
     background-color: hsl(var(--fore-colour));
@@ -118,6 +131,9 @@
     overflow: auto;
     height: 100%;
 }
+.buttons_container::-webkit-scrollbar {
+    width: 5px;
+}
 .buttons_container::-webkit-scrollbar,
 .buttons_container::-webkit-scrollbar-track {
     background-color: hsl(var(--main-colour));
@@ -138,6 +154,7 @@
     margin-top: 7.5px;
     padding: 7.5px;
     padding-left: 17px;
+    transition: 0.4s;
 }
 .menu_button:is(:hover, :focus-within) {
     background-color: hsl(var(--fore-colour));
@@ -162,7 +179,6 @@
     padding-top: 10px;
     padding-bottom: 15px;
     letter-spacing: 0.5px;
-    margin-top: 10px;
     border-top: 1px solid hsl(var(--main-colour));
 }
 .side_menu .footer .creator {
@@ -172,8 +188,25 @@
     cursor: default;
 }
 .side_menu .footer a {
-    cursor: pointer;
+    color: inherit;
+    text-decoration: none;
 }
 .side_menu .footer a:hover {
     text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+    .black_cover {
+        visibility: hidden;
+        opacity: 0;
+    }
+    .side_menu {
+        max-width: 100%;
+        width: 100%;
+        resize: none;
+    }
+    .side_menu .header .icon_button.back {
+        opacity: 1;
+        visibility: visible;
+    }
 }
