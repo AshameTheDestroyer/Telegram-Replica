@@ -136,7 +136,7 @@ export default function InfoMenu({
             position: isShown && appState.selectedMessage ? '' : 'absolute',
             right: isShown && appState.selectedMessage ? '' : 0,
             resize: !isBlurred && isShown && appState.selectedMessage ? '' : 'none',
-            opacity: !isBlurred && isShown && appState.selectedMessage ? 1 : 0
+            opacity: isShown && appState.selectedMessage ? 1 : 0
         }}>
             <div>
                 <Header />
